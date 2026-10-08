@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>GarageView</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Garage">
+    <meta name="theme-color" content="#000000">
+    <link rel="apple-touch-icon" href="/assets/logo-apple.png">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    {% if not is_authenticated %}
+    
+    <!-- VUE 0 : LOGIN -->
+    <div id="login-view" class="view active">
+        <div class="login-container">
+            <img src="/assets/logo-apple.png" alt="Logo" class="login-logo">
+            <h1 class="login-title">GarageView</h1>
+            <p class="login-subtitle">Connexion sécurisée</p>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Utilisateur" required autocomplete="username">
+                <input type="password" id="password" placeholder="Mot de passe" required autocomplete="current-password">
+                <button type="submit" class="login-submit">Se connecter</button>
+            </form>
+            <div id="login-error" class="login-error"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const btn = document.querySelector('.login-submit');
+            const errDiv = document.getElementById('login-error');
+            
+            btn.disabled = true;
+            btn.innerText = "Vérification...";
+            errDiv.innerText = "";
+            
+            fetch('/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({username: u.toLowerCase().trim(), password: p})
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Identifiants incorrects");
+                return res.json();
+            })
+            .then(() => {
+                window.location.reload();
+            })
+            .catch(err => {
+                errDiv.innerText = err.message;
+                btn.disabled = false;
+                btn.innerText = "Se connecter";
+            });
+        });
+    </script>
+    
+    {% else %}
+
+    <!-- TOAST ERREUR -->
+    <div id="error-toast" class="toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="error-message">Erreur de connexion</span>
+    </div>
+
+    <!-- HEADER CONNECTE (DÉCONNEXION) -->
+    <div class="user-header">
+        <button id="logout-btn">Quitter</button>
+    </div>
+
+    <!-- VUE 1 : ACCUEIL -->
+    <div id="home-view" class="view active">
+        
+        <div class="status-container">
+            <div id="door-status">
+                {% if system_state.porte_ouverte %}
+                    <div class="status-badge open">
+                        <div class="status-indicator"></div>
+                        Porte Ouverte
+                    </div>
+                {% else %}
+                    <div class="status-badge closed">
+                        <div class="status-indicator"></div>
+                        Porte Fermée
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="main-btn-wrapper">
+            {% if is_admin %}
+            <button id="trigger-btn" class="action-btn">
+                <div class="btn-ring"></div>
+                <img src="/assets/logo-white-nobg.png" alt="GarageLogo">
+            </button>
+            {% else %}
+            <button class="action-btn" disabled style="opacity: 0.3;">
+                <div class="btn-ring"></div>
+                <img src="/assets/logo-white-nobg.png" alt="GarageLogo">
+            </button>
+            <div style="text-align: center; color: #666; margin-top: 15px; font-size: 14px;">Mode consultation uniquement</div>
+            {% endif %}
+        </div>
+
+        <div class="bottom-controls">
+            <div class="sensor-data">
+                <div class="data-item">
+                    <span class="data-label">Radar de proximité</span>
+                    <span class="data-value"><span id="distance-val">{{ system_state.distance_cm }}</span> cm</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Dernier relevé</span>
+                    <span class="data-value" id="time-val">{{ system_state.derniere_mise_a_jour }}</span>
+                </div>
+            </div>
+
+            <!-- Mini Preview Caméra -->
+            <button id="open-cam-btn" class="cam-preview-btn">
+                <img class="shared-stream" src="/stream" alt="Preview Caméra">
+                <div class="cam-overlay-text">LIVE CAM</div>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- VUE 2 : CAMERA PLEIN ECRAN -->
+    <div id="cam-view" class="view">
+        <button id="close-cam-btn" class="close-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5"></path>
+                <path d="M12 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+        <img class="full-cam-stream shared-stream" src="" alt="Caméra Plein Écran">
+    </div>
+
+    <script src="/static/js/app.js" defer></script>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  garageview:
+    build: .
+    container_name: garageview_backend
+    restart: "no"
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./backend/garage.db:/app/backend/garage.db
+      - ./backend/app/core/.jwt_secret:/app/backend/app/core/.jwt_secret
+      - ./backend/app/static:/app/backend/app/static
+      - ./backend/protected:/app/backend/protected
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M

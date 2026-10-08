@@ -1,0 +1,44 @@
+# Environnements Python
+.venv/
+venv/
+.venv.nosync/
+venv.nosync/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers de configuration et secrets
+.env
+.env.*
+.jwt_secret
+
+# Base de données
+*.sqlite3
+*.db
+backend/garage.db
+
+# Fichiers système
+.DS_Store
+
+# Fichiers de logs
+*.log
+
+# Outils de développement
+.vscode/
+.idea/
+
+# Fichiers temporaires de l'agent
+scratch/
+secrets.h
+transfert/
+skills-lock.json
+
+# Documentation locale novice
+CORRECTIFS_SECURITE.md
+GUIDE_DEMARRAGE.md
+
+# Fichiers IA / Agents
+.agents/
+ROADMAP.md
+CONTEXT.md
