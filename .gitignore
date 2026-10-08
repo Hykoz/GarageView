@@ -34,9 +34,9 @@ secrets.h
 transfert/
 skills-lock.json
 
-# Documentation locale novice
-CORRECTIFS_SECURITE.md
+# Fichiers IA / Agents locaux (ne pas publier)
 GUIDE_DEMARRAGE.md
+CORRECTIFS_SECURITE.md
 
 # Fichiers IA / Agents
 .agents/
