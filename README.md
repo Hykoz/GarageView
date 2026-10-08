@@ -97,24 +97,20 @@ L'interface est en **mode sombre** avec une seule couleur d'accent : l'**ambre**
 git clone https://github.com/ton-username/GarageView.git
 cd GarageView
 
-# Créer et activer l'environnement virtuel Python
-python3 -m venv .venv.nosync
-source .venv.nosync/bin/activate
+# Lancer avec Docker (recommandé)
+docker-compose up --build -d
 ```
 
-> 🚧 Projet en cours de développement : le serveur, le simulateur d'ESP32 et le firmware seront ajoutés au fil des phases.
+> 💡 L'application sera accessible sur `http://127.0.0.1:8000`. Consultez le fichier `GUIDE_DEMARRAGE.md` pour plus de détails.
 
 ## 📁 Structure du projet
 
 ```
 GarageView/
-├── backend/             # Serveur Python FastAPI (à venir)
-├── frontend/            # Interface PWA (à venir)
-├── simulator/           # Faux ESP32 en Python pour développer sans matériel (à venir)
-├── firmware/            # Code Arduino C++ de l'ESP32-CAM (à venir)
-├── docs/                # Schémas de câblage, photos du montage (à venir)
+├── backend/             # Serveur Python FastAPI et frontend PWA
+├── arduino/             # Code Arduino C++ de l'ESP32-CAM
 ├── assets/              # Ressources graphiques (logo, images)
-├── .gitignore
+├── docker-compose.yml   # Configuration de déploiement Docker
 └── README.md
 ```
 
