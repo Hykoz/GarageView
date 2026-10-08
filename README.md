@@ -52,7 +52,7 @@ graph LR
     subgraph "Edge Node (IoT)"
         ESP[⚙️ ESP32-CAM]
         RELAY[🔌 Relay]
-        SENSOR[🧲 Magnetic Sensor]
+        SENSOR[📏 Ultrasonic Sensor]
     end
 
     PWA <-->|HTTPS / REST API| API
@@ -124,6 +124,7 @@ docker-compose up --build -d
 GarageView/
 ├── backend/             # FastAPI asynchronous core, SQLAlchemy models & UI
 ├── arduino/             # ESP32 C++ firmware (Hardware abstraction layer)
+├── 3d-model/            # 3D printable case (STL files) for the hardware
 ├── assets/              # UI graphics and static media
 ├── docker-compose.yml   # Infrastructure as Code (IaC) configuration
 └── README.md
